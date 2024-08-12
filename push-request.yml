@@ -1,0 +1,28 @@
+name: Push CI
+
+on: 
+  push:
+    branches:
+      - develop
+      - feature/*  # Optional: Runs on any feature branch push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'  # Specify your required PHP version
+        tools: composer, phpunit
+
+    - name: Install dependencies
+      run: composer install --no-progress --no-suggest --prefer-dist
+
+    - name: Run tests
+      run: vendor/bin/phpunit --coverage-text
